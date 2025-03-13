@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Меню{% endblock %}
+
+{% block content %}
+<div class="pb-80">
+    <h1 class="text-7xl  font-bold text-center mb-12 mt-12">Меню</h1>
+        <h2 id="dish" class="text-6xl font-semibold text-center mb-10 mt-10">Основные блюда</h2>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+                {% for dish in dishes %}
+                <div class="bg-gray-900 rounded-lg flex items-center p-8 hover:-translate-y-2 transition transform duration-300">
+                    <div class="w-1/2">
+                        <img src="{{ dish.image }}" class="w-full h-80 object-cover rounded-lg">
+                    </div>
+                    <div class="ml-10 flex-1">
+                        <h2 class="text-4xl font-semibold">{{ dish.name }}</h2>
+                        <p class="text-gray-400 mt-3 text-xl">{{ dish.description }}</p>
+                        <p class="text-2xl font-bold text-red-400 mt-4">{{ dish.price }} грн</p>
+                        <a href="{{ url_for('dish_detail', dish_id=dish.id) }}"
+                           class="inline-block mt-6 bg-violet-500 text-white px-6 py-3 rounded-lg transition duration-300 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300">
+                           Подробнее
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        <h2 id="drink" class="text-6xl font-semibold text-center mb-10 mt-10">Напитки</h2>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+                {% for drink in drinks %}
+                <div class="bg-gray-900 rounded-lg flex items-center p-8 hover:-translate-y-2 transition transform duration-300">
+                    <div class="w-1/2">
+                        <img src="{{ drink.image }}" class="w-full h-80 object-cover rounded-lg">
+                    </div>
+                    <div class="ml-10 flex-1">
+                        <h2 class="text-4xl font-semibold">{{ drink.name }}</h2>
+                        <p class="text-gray-400 mt-3 text-xl">{{ drink.description }}</p>
+                        <p class="text-2xl font-bold text-red-400 mt-4">{{ drink.price }} грн</p>
+                        <a href="{{ url_for('drink_detail', drink_id=drink.id) }}"
+                           class="inline-block mt-6 bg-violet-500 text-white px-6 py-3 rounded-lg transition duration-300 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300">
+                           Подробнее
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        <h2 id="dessert" class="text-6xl font-semibold text-center mb-10 mt-10">Десерты</h2>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+                {% for dessert in desserts %}
+                <div class="bg-gray-900 rounded-lg flex items-center p-8 hover:-translate-y-2 transition transform duration-300">
+                    <div class="w-1/2">
+                        <img src="{{ dessert.image }}" class="w-full h-80 object-cover rounded-lg">
+                    </div>
+                    <div class="ml-10 flex-1">
+                        <h2 class="text-4xl font-semibold">{{ dessert.name }}</h2>
+                        <p class="text-gray-400 mt-3 text-xl">{{ dessert.description }}</p>
+                        <p class="text-2xl font-bold text-red-400 mt-4">{{ dessert.price }} грн</p>
+                        <a href="{{ url_for('dessert_detail', dessert_id=dessert.id) }}"
+                           class="inline-block mt-6 bg-violet-500 text-white px-6 py-3 rounded-lg transition duration-300 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300">
+                           Подробнее
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        <div class="fixed top-20 left-6 z-50 mt-4">
+            <div class="flex items-center gap-3 bg-gray-800 px-6 py-3 rounded-xl shadow-lg border border-gray-900">
+                <span class="text-white text-sm font-medium hover:text-yellow-400">Style 1</span>
+                <button onclick="toggleCardStyle()"
+                        class="relative inline-flex h-8 w-16 items-center rounded-full bg-gray-600 transition duration-300 focus:outline-none">
+                  <span class="sr-only">Переключить стиль</span>
+                  <span id="toggle-button"
+                        class="absolute left-1 w-7 h-7 bg-primary bg-gray-800 rounded-full shadow-md transition-all duration-300"></span>
+                </button>
+                <span class="text-white text-sm font-medium hover:text-yellow-400">Style 2</span>
+            </div>
+        </div>
+    {% endblock %}
+</div>

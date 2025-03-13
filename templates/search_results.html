@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Результаты поиска{% endblock %}
+
+{% block content %}
+<h1>Результаты поиска для "{{ request.args.get('query') }}"</h1>
+
+<h2>Блюда</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for dish in results.dishes %}
+        <div class="bg-gray-900 p-4 rounded-lg">
+            <img src="{{ dish.image }}" alt="{{ dish.name }}" class="w-full h-48 object-cover rounded-md mb-2">
+            <h3 class="text-xl font-semibold">{{ dish.name }}</h3>
+            <p class="text-gray-400">{{ dish.description }}</p>
+            <p class="text-2xl font-bold text-red-400">{{ dish.price }} грн</p>
+            <a href="{{ url_for('dish_detail', dish_id=dish.id) }}" class="bg-lime-600 text-white px-4 py-2 rounded-lg mt-2 inline-block">Добавить в корзину</a>
+        </div>
+    {% endfor %}
+</div>
+
+<h2>Напитки</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for drink in results.drinks %}
+        <div class="bg-gray-900 p-4 rounded-lg">
+            <img src="{{ drink.image }}" alt="{{ drink.name }}" class="w-full h-48 object-cover rounded-md mb-2">
+            <h3 class="text-xl font-semibold">{{ drink.name }}</h3>
+            <p class="text-gray-400">{{ drink.description }}</p>
+            <p class="text-2xl font-bold text-red-400">{{ drink.price }} грн</p>
+            <a href="{{ url_for('drink_detail', drink_id=drink.id) }}" class="bg-lime-600 text-white px-4 py-2 rounded-lg mt-2 inline-block">Добавить в корзину</a>
+        </div>
+    {% endfor %}
+</div>
+
+<h2>Десерты</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {% for dessert in results.desserts %}
+        <div class="bg-gray-900 p-4 rounded-lg">
+            <img src="{{ dessert.image }}" alt="{{ dessert.name }}" class="w-full h-48 object-cover rounded-md mb-2">
+            <h3 class="text-xl font-semibold">{{ dessert.name }}</h3>
+            <p class="text-gray-400">{{ dessert.description }}</p>
+            <p class="text-2xl font-bold text-red-400">{{ dessert.price }} грн</p>
+            <a href="{{ url_for('dessert_detail', dessert_id=dessert.id) }}" class="bg-lime-600 text-white px-4 py-2 rounded-lg mt-2 inline-block">Добавить в корзину</a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
