@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="bg-gray-800 text-white flex flex-col min-h-screen">
+    <header class="bg-gray-900 text-white py-4 px-9 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-700 flex items-center justify-center">
+                <img src="{{ avatar_url }}" alt="Profile" class="w-full h-full object-cover" id="profileAvatar">
+            </div>
+            <a href="{{ url_for('home') }}" class="text-3xl font-bold">Asian Restaurant</a>
+        </div>
+    </header>
+
+    <main class="pt-20 flex-grow flex items-center justify-center">
+        <div class="bg-gray-900 p-8 rounded-lg shadow-lg max-w-md w-full">
+            <h2 class="text-2xl font-bold mb-6 text-center">Профиль пользователя</h2>
+
+            <div class="flex flex-col items-center mb-6">
+                <div class="w-32 h-32 rounded-full overflow-hidden bg-gray-700 mb-4">
+                    <img src="{{ avatar_url }}" alt="Аватар" class="w-full h-full object-cover" id="avatarPreview">
+                </div>
+            </div>
+
+            <div id="uploadForm" class="mb-6">
+                <form id="avatarForm" method="POST" enctype="multipart/form-data" action="/upload_avatar">
+                    <div class="relative">
+                        <label for="avatar" class="flex items-center justify-center gap-2 p-3 border-2 border-dashed rounded-lg cursor-pointer border-gray-600 hover:border-yellow-400 transition-colors">
+                            <span class="material-icons text-yellow-500">file_upload</span>
+                            <span>Выберите изображение</span>
+                            <input type="file" name="avatar" id="avatar" accept="image/*" class="hidden" required>
+                        </label>
+                        <p id="selectedFileName" class="mt-2 text-sm text-gray-400 hidden"></p>
+                    </div>
+
+                    <button type="submit" class="bg-yellow-500 text-black font-medium py-2 px-4 rounded hover:bg-yellow-400 transition-colors">
+                        Загрузить аватар
+                    </button>
+                </form>
+            </div>
+
+            <div id="uploadStatus" class="hidden mb-4 p-4 rounded-lg"></div>
+
+            <a href="{{ url_for('home') }}" class="block text-center text-yellow-400 hover:underline">
+                Вернуться на главную
+            </a>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const avatarForm = document.getElementById('avatarForm');
+            const avatarInput = document.getElementById('avatar');
+            const selectedFileName = document.getElementById('selectedFileName');
+            const avatarPreview = document.getElementById('avatarPreview');
+            const profileAvatar = document.getElementById('profileAvatar');
+            const uploadStatus = document.getElementById('uploadStatus');
+
+            // Показываем имя выбранного файла
+            avatarInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    // Показываем имя файла
+                    selectedFileName.textContent = this.files[0].name;
+                    selectedFileName.classList.remove('hidden');
+
+                    // Предпросмотр изображения
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        avatarPreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
+            // Обработка отправки формы
+            avatarForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Проверяем, выбран ли файл
+                if (!avatarInput.files || !avatarInput.files[0]) {
+                    showStatus('Пожалуйста, выберите изображение', 'error');
+                    return;
+                }
+
+                // Показываем статус загрузки
+                showStatus('Загрузка...', 'loading');
+
+                const formData = new FormData(this);
+
+                fetch('/upload_avatar', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Обновляем аватар на странице
+                        if (data.avatar_url) {
+                            avatarPreview.src = data.avatar_url;
+                            profileAvatar.src = data.avatar_url;
+                        }
+                        showStatus(data.message, 'success');
+                    } else {
+                        showStatus(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    showStatus('Произошла ошибка при отправке формы', 'error');
+                });
+            });
+
+            // Функция для отображения статуса
+            function showStatus(message, type) {
+                uploadStatus.textContent = message;
+                uploadStatus.classList.remove('hidden', 'bg-green-500', 'bg-red-500', 'bg-yellow-500');
+
+                switch(type) {
+                    case 'success':
+                        uploadStatus.classList.add('bg-green-500');
+                        break;
+                    case 'error':
+                        uploadStatus.classList.add('bg-red-500');
+                        break;
+                    case 'loading':
+                        uploadStatus.classList.add('bg-yellow-500');
+                        break;
+                }
+
+                uploadStatus.classList.remove('hidden');
+
+                // Скрываем сообщение об успехе через 3 секунды
+                if (type === 'success') {
+                    setTimeout(() => {
+                        uploadStatus.classList.add('hidden');
+                    }, 3000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

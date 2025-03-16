@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка аватара</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-800 text-white flex flex-col min-h-screen">
+    <div class="flex justify-center items-center h-screen">
+        <div class="bg-gray-900 p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold mb-4">Загрузить аватар</h2>
+            <form action="/upload_avatar" method="POST" enctype="multipart/form-data">
+                <input type="file" name="avatar" accept="image/*" required class="mb-4">
+                <button type="submit" class="bg-lime-600 text-white px-4 py-2 rounded">Загрузить</button>
+            </form>
+            <a href="/" class="text-blue-400 hover:underline mt-4 block">Назад на главную</a>
+        </div>
+    </div>
+</body>
+</html>
